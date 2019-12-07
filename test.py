@@ -22,6 +22,8 @@ from torch.autograd import Variable
 from conf import settings
 from utils import get_network, get_test_dataloader
 
+from FLOPs import get_model_complexity_info
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
@@ -34,6 +36,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     net = get_network(args)
+    flops, params = get_model_complexity_info(net,(3,32,32),as_strings=True,print_per_layer_stat=False)
 
     cifar100_test_loader = get_test_dataloader(
         settings.CIFAR100_TRAIN_MEAN,
@@ -65,7 +68,7 @@ if __name__ == '__main__':
         #compute top 5
         correct_5 += correct[:, :5].sum()
 
-        #compute top1 
+        #compute top1
         correct_1 += correct[:, :1].sum()
 
 
@@ -73,3 +76,5 @@ if __name__ == '__main__':
     print("Top 1 err: ", 1 - correct_1 / len(cifar100_test_loader.dataset))
     print("Top 5 err: ", 1 - correct_5 / len(cifar100_test_loader.dataset))
     print("Parameter numbers: {}".format(sum(p.numel() for p in net.parameters())))
+    print("FLOPs: {}".format(flops))
+    print("Params: {}".format(params))
