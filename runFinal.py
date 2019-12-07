@@ -40,6 +40,10 @@ def main():
     )
     flopsS, paramsS = get_model_complexity_info(snet,(3,32,32),as_strings=True,print_per_layer_stat=False)
     flopsL, paramsL = get_model_complexity_info(lnet,(3,32,32),as_strings=True,print_per_layer_stat=False)
+    flopsS = flopsS[:4]
+    flopsL = flopsL[:4]
+    print(flopsS)
+    print(flopsL)
     snet.load_state_dict(torch.load(args.small_path), args.gpu)
     print(snet)
     snet.eval()
