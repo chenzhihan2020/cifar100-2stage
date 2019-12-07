@@ -33,7 +33,7 @@ if __name__ == '__main__':
     parser.add_argument('-weights', type=str, required=True, help='the weights file you want to test')
     parser.add_argument('-gpu', type=bool, default=True, help='use gpu or not')
     parser.add_argument('-w', type=int, default=2, help='number of workers for dataloader')
-    parser.add_argument('-b', type=int, default=16, help='batch size for dataloader')
+    parser.add_argument('-b', type=int, default=1, help='batch size for dataloader')
     parser.add_argument('-s', type=bool, default=True, help='whether shuffle the dataset')
     args = parser.parse_args()
 
