@@ -11,6 +11,8 @@ from torch.autograd import Variable
 
 from models import *
 import time
+from FLOPs import get_model_complexity_info
+
 
 parser = argparse.ArgumentParser(description='2-stage classification model on cifar100')
 parser.add_argument('--small', default='mobilenetv2', type=str,  help='small model name under models/')
@@ -36,7 +38,8 @@ def main():
         batch_size=args.b,
         shuffle=args.s
     )
-
+    flopsS, paramsS = get_model_complexity_info(snet,(3,32,32),as_strings=True,print_per_layer_stat=False)
+    flopsL, paramsL = get_model_complexity_info(lnet,(3,32,32),as_strings=True,print_per_layer_stat=False)
     snet.load_state_dict(torch.load(args.small_path), args.gpu)
     print(snet)
     snet.eval()
@@ -75,9 +78,11 @@ def main():
                 total_large += args.b
     endTime = time.time()
     testTime = endTime - beginTime
+    totalFLOPs = flopsS * total_small + flopsL * total_large
     print("Top1 acc: small model: {}/{} big model: {}/{}".format(correct_1_small, total_small, correct_1_large, total_large))
     #print("Top5 acc: small model: {}/{} big model: {}/{}".format(correct_1_small, total_small, correct_1_large, total_large))
     print("Total test time is ", testTime)
+    print("Total FLOPs for CNNs is ", totalFLOPs)
 
 if __name__=='__main__':
     main()
