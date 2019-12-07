@@ -23,6 +23,8 @@ from conf import settings
 from utils import get_network, get_test_dataloader
 
 from FLOPs import get_model_complexity_info
+import time
+import datetime
 
 if __name__ == '__main__':
 
@@ -55,6 +57,7 @@ if __name__ == '__main__':
     correct_5 = 0.0
     total = 0
 
+    beginTime = time.time()
     for n_iter, (image, label) in enumerate(cifar100_test_loader):
         print("iteration: {}\ttotal {} iterations".format(n_iter + 1, len(cifar100_test_loader)))
         image = Variable(image).cuda()
@@ -70,7 +73,8 @@ if __name__ == '__main__':
 
         #compute top1.
         correct_1 += correct[:, :1].sum()
-
+    endTime = time.time()
+    testTime = str(datetime.timedelta(beginTime - endTime))
 
     print()
     print("Top 1 err: ", 1 - correct_1 / len(cifar100_test_loader.dataset))
@@ -78,3 +82,4 @@ if __name__ == '__main__':
     print("Parameter numbers: {}".format(sum(p.numel() for p in net.parameters())))
     print("FLOPs: {}".format(flops))
     print("Params: {}".format(params))
+    print("Total test time is ", testTime)
