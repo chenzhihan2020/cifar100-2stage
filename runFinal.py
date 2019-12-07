@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader
 from torch.autograd import Variable
 
 from models import *
-
+import time
 
 parser = argparse.ArgumentParser(description='2-stage classification model on cifar100')
 parser.add_argument('--small', default='mobilenetv2', type=str,  help='small model name under models/')
@@ -42,7 +42,7 @@ def main():
     lnet.load_state_dict(torch.load(args.large_path), args.gpu)
     print(lnet)
     lnet.eval()
-    
+
     correct_1_small = 0.0
     correct_5_small = 0.0
     correct_1_large = 0.0
@@ -50,14 +50,15 @@ def main():
     threshold = 0.10
     total_small = 0
     total_large = 0
-    
+
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    beginTime = time.time()
     with torch.no_grad():
         for n_iter, (image, label) in enumerate(test_loader):
             #print("iteration: {}\ttotal {} iterations".format(n_iter + 1, len(testloader)))
             image = Variable(image).to(device)
             label = Variable(label).to(device)
-            output = snet(image)           
+            output = snet(image)
             score, pred = output.topk(1, 1, largest=True, sorted=True)
             label = label.view(label.size(0), -1).expand_as(pred)
             correct = pred.eq(label).float()
@@ -71,10 +72,11 @@ def main():
                 correct = pred.eq(label).float()
                 correct_1_large += correct[:, :1].sum()
                 total_large += args.b
+    endTime = time.time()
+    testTime = endTime - beginTime
     print("Top1 acc: small model: {}/{} big model: {}/{}".format(correct_1_small, total_small, correct_1_large, total_large))
-    print("Top5 acc: small model: {}/{} big model: {}/{}".format(correct_1_small, total_small, correct_1_large, total_large))
-
+    #print("Top5 acc: small model: {}/{} big model: {}/{}".format(correct_1_small, total_small, correct_1_large, total_large))
+    print("Total test time is ", testTime)
 
 if __name__=='__main__':
     main()
-
