@@ -37,7 +37,7 @@ if __name__ == '__main__':
     parser.add_argument('-s', type=bool, default=True, help='whether shuffle the dataset')
     args = parser.parse_args()
 
-    net = get_network(args)
+    net = get_network(args.net)
     flops, params = get_model_complexity_info(net,(3,32,32),as_strings=True,print_per_layer_stat=False)
 
     cifar100_test_loader = get_test_dataloader(
