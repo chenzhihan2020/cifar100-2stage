@@ -27,7 +27,7 @@ start_time=time.time()
 
 def main():
     snet = get_network(args.small)
-    lnet = large_net(args.large)
+    lnet = get_network(args.large)
     test_loader = get_test_dataloader(
         settings.CIFAR100_TRAIN_MEAN,
         settings.CIFAR100_TRAIN_STD,
