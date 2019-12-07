@@ -21,12 +21,9 @@ parser.add_argument('-b', type=int, default=1, help='batch size for dataloader')
 parser.add_argument('-s', type=bool, default=False, help='whether shuffle the dataset')
 args = parser.parse_args()
 
-from models import mobilenetv2 as small_net
-from models import seresnet50 as large_net
-start_time=time.time()
 
 def main():
-    net = small_net()
+    net = get_network(args.net, use_gpu=args.gpu)
     training_loader = get_training_dataloader(
         settings.CIFAR100_TRAIN_MEAN,
         settings.CIFAR100_TRAIN_STD,
