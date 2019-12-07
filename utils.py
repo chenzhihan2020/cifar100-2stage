@@ -197,7 +197,7 @@ def get_test_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
 
     return cifar100_test_loader
 
-def get_train_classified(mean, std){
+def get_train_classified(mean, std):
     transform_train = transforms.Compose([
         #transforms.ToPILImage(),
         transforms.RandomCrop(32, padding=4),
@@ -217,7 +217,6 @@ def get_train_classified(mean, std){
         character[Y].append(X)  # 32*32*3
     
     return character
-}
 
 def compute_mean_std(cifar100_dataset):
     """compute the mean and std of cifar100 dataset
