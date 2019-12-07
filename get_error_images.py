@@ -2,8 +2,9 @@ import argparse
 import os
 import time
 
+import numpy as np
 from conf import settings
-from utils import get_network, get_training_dataloader
+from utils import get_network, get_training_dataloader, get_train_classified
 import torch
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
@@ -24,13 +25,6 @@ args = parser.parse_args()
 
 def main():
     net = get_network(args.net, use_gpu=args.gpu)
-    training_loader = get_training_dataloader(
-        settings.CIFAR100_TRAIN_MEAN,
-        settings.CIFAR100_TRAIN_STD,
-        num_workers=args.w,
-        batch_size=args.b,
-        shuffle=False
-    )
 
     net.load_state_dict(torch.load(args.weight), args.gpu)
     #print(net)
@@ -38,17 +32,31 @@ def main():
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     err_indexes = [[] for i in range(100)]
+    err_count =[0 for i in range(100)]
+    ind = 0
+    training_data = get_train_classified(settings.CIFAR100_TRAIN_MEAN, settings.CIFAR100_TRAIN_STD)
+    
     with torch.no_grad():
-        for n_iter, (image, label) in enumerate(training_loader):
+        for label, image in enumerate(training_data):
             #print("iteration: {}\ttotal {} iterations".format(n_iter + 1, len(testloader)))
-            image = Variable(image).to(device)
-            label = Variable(label).to(device)
+            n_image = len(image)
+            assert n_image==500
+            image = Variable(torch.from_numpy(np.array(image))).to(device)
+            label = Variable(torch.from_numpy(np.array([label for i in range(n_image)]))).to(device)
             output = net(image)           
             _ , pred = output.topk(1, 1, largest=True, sorted=True)
             label = label.view(label.size(0), -1).expand_as(pred)
-            correct = pred[:,0].eq(label).cpu().numpy()
+            correct = pred[:,0].eq(label)
             print(correct)
-            
+            #if(not correct[0][0]):
+            #    err_indexes[label[0][0]].append(ind)
+            #    err_count[label[0][0]] += 1
+            #ind += 1
+    #print(err_count)
+    
+    #np.savetxt(args.net+"_errimgs.txt", err_indexes, fmt="%d", delimiter=",")
+    #np.savetxt(args.net+"_errstats.txt", err_count, fmt="%d", delimiter=",")
+    
 
 
 
