@@ -210,7 +210,7 @@ def get_train_classified(mean, std):
     cifar100_training = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform_train)
     character = [[] for i in range(100)]
     dataset = []
-    for (X, Y) in zip(cifar100_training.train_data, cifar100_training.train_labels):  # 将train_set的数据和label读入列表
+    for (X, Y) in zip(cifar100_training.data, cifar100_training.targets):  # 将train_set的数据和label读入列表
         dataset.append(list((X, Y)))
 
     for X, Y in dataset:
