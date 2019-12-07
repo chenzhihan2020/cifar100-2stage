@@ -21,6 +21,7 @@ parser.add_argument('-gpu', type=bool, default=True, help='use gpu or not')
 parser.add_argument('-w', type=int, default=2, help='number of workers for dataloader')
 parser.add_argument('-b', type=int, default=1, help='batch size for dataloader')
 parser.add_argument('-s', type=bool, default=False, help='whether shuffle the dataset')
+parser.add_argument('-threshold', type=float, default=0.10)
 args = parser.parse_args()
 
 start_time=time.time()
@@ -47,7 +48,7 @@ def main():
     correct_5_small = 0.0
     correct_1_large = 0.0
     correct_5_large = 0.0
-    threshold = 0.10
+    threshold = args.threshold
     total_small = 0
     total_large = 0
 
