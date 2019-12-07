@@ -74,12 +74,12 @@ if __name__ == '__main__':
         #compute top1.
         correct_1 += correct[:, :1].sum()
     endTime = time.time()
-    testTime = str(datetime.timedelta(endTime - beginTime))
-
+    #testTime = str(datetime.timedelta(endTime - beginTime))
+    testTime = endTime - beginTime
     print()
     print("Top 1 err: ", 1 - correct_1 / len(cifar100_test_loader.dataset))
     print("Top 5 err: ", 1 - correct_5 / len(cifar100_test_loader.dataset))
-    print("Parameter numbers: {}".format(sum(p.numel() for p in net.parameters())))
+    #print("Parameter numbers: {}".format(sum(p.numel() for p in net.parameters())))
     print("FLOPs: {}".format(flops))
     print("Params: {}".format(params))
     print("Total test time is ", testTime)
