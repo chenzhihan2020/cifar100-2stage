@@ -197,6 +197,28 @@ def get_test_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
 
     return cifar100_test_loader
 
+def get_train_classified(mean, std){
+    transform_train = transforms.Compose([
+        #transforms.ToPILImage(),
+        transforms.RandomCrop(32, padding=4),
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomRotation(15),
+        transforms.ToTensor(),
+        transforms.Normalize(mean, std)
+    ])
+    #cifar100_training = CIFAR100Train(path, transform=transform_train)
+    cifar100_training = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform_train)
+    character = [[] for i in range(100)]
+    dataset = []
+    for (X, Y) in zip(cifar100_training.train_data, cifar100_training.train_labels):  # 将train_set的数据和label读入列表
+        dataset.append(list((X, Y)))
+
+    for X, Y in dataset:
+        character[Y].append(X)  # 32*32*3
+    
+    return character
+}
+
 def compute_mean_std(cifar100_dataset):
     """compute the mean and std of cifar100 dataset
     Args:
