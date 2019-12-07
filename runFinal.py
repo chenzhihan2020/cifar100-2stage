@@ -48,7 +48,7 @@ def main():
     correct_5_small = 0.0
     correct_1_large = 0.0
     correct_5_large = 0.0
-    threshold = args.threshold
+    threshold = float(args.threshold)
     total_small = 0
     total_large = 0
 
