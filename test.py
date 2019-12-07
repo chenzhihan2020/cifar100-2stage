@@ -74,7 +74,7 @@ if __name__ == '__main__':
         #compute top1.
         correct_1 += correct[:, :1].sum()
     endTime = time.time()
-    testTime = str(datetime.timedelta(beginTime - endTime))
+    testTime = str(datetime.timedelta(endTime - beginTime))
 
     print()
     print("Top 1 err: ", 1 - correct_1 / len(cifar100_test_loader.dataset))
