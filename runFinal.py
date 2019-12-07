@@ -40,10 +40,6 @@ def main():
     )
     flopsS, paramsS = get_model_complexity_info(snet,(3,32,32),as_strings=True,print_per_layer_stat=False)
     flopsL, paramsL = get_model_complexity_info(lnet,(3,32,32),as_strings=True,print_per_layer_stat=False)
-    flopsS = flopsS[:4]
-    flopsL = flopsL[:4]
-    print(flopsS)
-    print(flopsL)
     snet.load_state_dict(torch.load(args.small_path), args.gpu)
     print(snet)
     snet.eval()
@@ -52,9 +48,9 @@ def main():
     lnet.eval()
 
     correct_1_small = 0.0
-    correct_5_small = 0.0
+    #correct_5_small = 0.0
     correct_1_large = 0.0
-    correct_5_large = 0.0
+    #correct_5_large = 0.0
     threshold = float(args.threshold)
     total_small = 0
     total_large = 0
@@ -82,7 +78,7 @@ def main():
                 total_large += args.b
     endTime = time.time()
     testTime = endTime - beginTime
-    totalFLOPs = (float(flopsS) * float(total_small)) + (float(flopsL) * float(total_large))
+    totalFLOPs = (float(flopsS[:4]) * float(total_small)) + (float(flopsL[:4]) * float(total_large))
     print("Top1 acc: small model: {}/{} big model: {}/{}".format(correct_1_small, total_small, correct_1_large, total_large))
     #print("Top5 acc: small model: {}/{} big model: {}/{}".format(correct_1_small, total_small, correct_1_large, total_large))
     print("Total test time is ", testTime)
