@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
     beginTime = time.time()
     for n_iter, (image, label) in enumerate(cifar100_test_loader):
-        print("iteration: {}\ttotal {} iterations".format(n_iter + 1, len(cifar100_test_loader)))
+        #print("iteration: {}\ttotal {} iterations".format(n_iter + 1, len(cifar100_test_loader)))
         image = Variable(image).cuda()
         label = Variable(label).cuda()
         output = net(image)
