@@ -82,6 +82,7 @@ def main():
     acc = float(correct_1_small + correct_1_large) / 10000
     print("Top1 acc: small model: {}/{} big model: {}/{}".format(correct_1_small, total_small, correct_1_large, total_large))
     #print("Top5 acc: small model: {}/{} big model: {}/{}".format(correct_1_small, total_small, correct_1_large, total_large))
+    print("Top1 acc for all the system: ", acc)
     print("Total test time is ", testTime)
     print("Total FLOPs for CNNs is ", totalFLOPs)
 
